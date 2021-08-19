@@ -180,6 +180,8 @@ int main(int argc, char const *argv[])
       return 0;
    }
 
+   cout << "Running " << argv[1] << endl;
+
    int forgl = 0;
 
    for (auto c : commands)
