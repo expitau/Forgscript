@@ -65,21 +65,22 @@ public:
    Forg(vector<Command> map, int line) : map{map}, line{line} {};
    void execute()
    {
-      switch (map[line].get_command()){
-         case '*':
-            cin >> memory[map[line].get_data()];
-            break;
-         case '^':
-            cout << memory[map[line].get_data()] << endl;
-            break;
-         case '+':
-            memory[map[line].get_data()]++;
-            break;
-         case '-':
-            memory[map[line].get_data()]--;
-            break;
-         default:
-            break;
+      switch (map[line].get_command())
+      {
+      case '*':
+         cin >> memory[map[line].get_data()];
+         break;
+      case '^':
+         cout << memory[map[line].get_data()] << endl;
+         break;
+      case '+':
+         memory[map[line].get_data()]++;
+         break;
+      case '-':
+         memory[map[line].get_data()]--;
+         break;
+      default:
+         break;
       }
    }
    void jump()
@@ -171,6 +172,7 @@ vector<Command> parse(istream *input_stream)
 
 int main(int argc, char const *argv[])
 {
+   cout << "Starting" << endl;
    vector<Command> commands;
    if (argc == 2)
       commands = parse(new ifstream(argv[1]));
