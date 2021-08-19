@@ -86,3 +86,7 @@ Control flow starts at the forg on line 1, this is an odd number so the forg jum
 18 is even, so the forg then hops back to line 9. Because memory cell 1 is not zero, `p1` (the upside down duck) decides to not let forg onto its back. Forg swims to line 7, and decrements memory cell 1 (now 2). Forg jumps to line 22, and increments memory cell 2 (now 6). Forg jumps back to line 11 and swims to the upside-down duck on line 9. Memory cell 1 still isn't zero, so forg continues swimming until he once again reaches line 7. 
 
 He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero and cell 2 is eight. Now, forg swims to the upside-down duck and (because cell 1 is zero) the duck lets him on his back, so forg can jump all the way to line 28, where he outputs 8 to stdout. He finally jumps to line 14, where he falls asleep and the program terminates.
+
+## Compilation
+Run a forglang program using the syntax
+```./forglang.exe <path>```, passing the path to your script as an argument.
