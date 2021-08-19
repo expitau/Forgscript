@@ -88,5 +88,16 @@ Control flow starts at the forg on line 1, this is an odd number so the forg jum
 He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero and cell 2 is eight. Now, forg swims to the upside-down duck and (because cell 1 is zero) the duck lets him on his back, so forg can jump all the way to line 28, where he outputs 8 to stdout. He finally jumps to line 14, where he falls asleep and the program terminates.
 
 ## Compilation
+
+Generate the interpreter
+
+```powershell
+g++ forglang.cc -o forglang
+```
+
 Run a forglang program using the syntax
-```./forglang.exe <path>```, passing the path to your script as an argument.
+```.\forglang.exe <path>```, passing the path to your script as an argument. For example, 
+
+```powershell
+.\forglang.exe add.forg
+```

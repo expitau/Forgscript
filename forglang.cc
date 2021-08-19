@@ -172,7 +172,6 @@ vector<Command> parse(istream *input_stream)
 
 int main(int argc, char const *argv[])
 {
-   cout << "Starting" << endl;
    vector<Command> commands;
    if (argc == 2)
       commands = parse(new ifstream(argv[1]));
