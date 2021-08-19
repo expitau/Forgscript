@@ -89,15 +89,12 @@ He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero an
 
 ## Compilation
 
-Generate the interpreter
-
-```powershell
-g++ forglang.cc -o forglang
-```
-
 Run a forglang program using the syntax
 ```.\forglang.exe <path>```, passing the path to your script as an argument. For example, 
 
 ```powershell
 .\forglang.exe add.forg
 ```
+
+(Use `g++ forglang.cc -o forglang
+` to compile from the source, or use the standalone executable provided)
