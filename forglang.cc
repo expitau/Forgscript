@@ -51,6 +51,12 @@ public:
 
 class OutOfBoundsException
 {
+private:
+   int endLine;
+
+public:
+   OutOfBoundsException(int endLine) : endLine{endLine} {}
+   int getLine() { return endLine; }
 };
 
 class Forg
@@ -59,19 +65,24 @@ private:
    vector<Command> map;
    int line;
    std::map<int, int> memory;
+   vector<int> path;
 
 public:
-   Forg(vector<Command> map) : map{map}, line{1} {};
-   Forg(vector<Command> map, int line) : map{map}, line{line} {};
+   Forg(vector<Command> map) : map{map}, line{1} { path.push_back(line + 1); };
+   Forg(vector<Command> map, int line) : map{map}, line{line} { path.push_back(line + 1); };
    void execute()
    {
       switch (map[line].get_command())
       {
       case '*':
-         cin >> memory[map[line].get_data()];
+         while (!(cin >> memory[map[line].get_data()]))
+         {
+            cin.clear();
+            cin.ignore(1);
+         }
          break;
       case '^':
-         cout << memory[map[line].get_data()] << endl;
+         cout << "Forg says '" << memory[map[line].get_data()] << "'" << endl;
          break;
       case '+':
          memory[map[line].get_data()]++;
@@ -99,12 +110,14 @@ public:
          swim(1);
       }
       // cout << "Swam to " << line + 1 << endl;
+      path.push_back(line + 1);
    }
    void swim(int dir)
    {
       if (line < 0 || line >= map.size() || map[line].get_command() == 'z')
       {
-         throw OutOfBoundsException{};
+         path.push_back(line + 1);
+         throw OutOfBoundsException{line};
       }
 
       while (map[line].get_command() == '~' || (map[line].get_command() == 'd' && memory[map[line].get_data()] == 0) || (map[line].get_command() == 'p' && memory[map[line].get_data()] != 0))
@@ -112,13 +125,21 @@ public:
          line += dir;
          if (line < 0 || line >= map.size() || map[line].get_command() == 'z')
          {
-            throw OutOfBoundsException{};
+            path.push_back(line + 1);
+            throw OutOfBoundsException{line};
          }
       }
    }
+   vector<int> getPath()
+   {
+      return path;
+   }
+   std::map<int, int> getMemory(){
+      return memory;
+   }
 };
 
-vector<Command> parse(istream *input_stream)
+vector<Command> parseFile(istream *input_stream)
 {
    vector<Command> out;
    stringstream in;
@@ -173,28 +194,56 @@ vector<Command> parse(istream *input_stream)
 int main(int argc, char const *argv[])
 {
    vector<Command> commands;
-   if (argc == 2)
-      commands = parse(new ifstream(argv[1]));
-   else
+   ifstream program;
+   bool debugMode = false;
+
+   for (int i = 0; i < argc; i++)
    {
-      cout << "No input file specified" << endl;
-      return 0;
+      string arg = argv[i];
+      if (arg == "-d")
+      {
+         debugMode = true;
+      }
+      if (arg == "--help" || arg == "/?" || arg == "-h" || arg == "-?")
+      {
+         cout << "Usage: " << argv[0] << " program [-d]" << endl
+              << "Options:" << endl
+              << "\t -d \tDebug mode" << endl;
+         return 0;
+      }
    }
 
-   cout << "Running " << argv[1] << endl;
+   if (argc <= 1)
+   {
+      cout << "No input file specified" << endl
+           << "Type '" << argv[0] << " --help' for usage";
+      return 0;
+   }
+   program.open(argv[1]);
+   if (!program)
+   {
+      cout << "Could not find file '" << argv[1] << "'" << endl;
+      return 0;
+   }
+   else
+   {
+      commands = parseFile(&program);
+   }
 
-   int forgl = 0;
+   cout << "-- Running " << argv[1] << (debugMode ? " [Debug mode]" : "") << " --" << endl;
+
+   int forg_start = 0;
 
    for (auto c : commands)
    {
       if (c.get_command() == '@')
       {
-         forgl = c.get_line();
+         forg_start = c.get_line();
          break;
       }
    }
 
-   Forg f(commands, forgl);
+   Forg f(commands, forg_start);
 
    while (true)
    {
@@ -205,9 +254,26 @@ int main(int argc, char const *argv[])
       }
       catch (OutOfBoundsException)
       {
-         cout << "Done!" << endl;
+         cout << endl
+              << "Done!" << endl;
          break;
       }
+   }
+
+   if (debugMode)
+   {
+      cout << endl << "-- Debug --" << endl;
+      cout << "Path: ";
+      for (auto i : f.getPath())
+      {
+         cout << i << "->";
+      }
+      cout << "END" << endl;
+      cout << "Final memory dump: ";
+      for (auto i : f.getMemory()){
+         cout << i.first << "[" << i.second << "] ";
+      }
+      cout << endl;
    }
 
    return 0;
