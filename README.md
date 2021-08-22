@@ -1,5 +1,8 @@
 # Forglang
 
+### About
+Forglang is an esoteric programming language (similar to [brainfuck](https://en.wikipedia.org/wiki/Brainfuck)), whose distinguishing feature is non-linear code execution.
+
 ## Documentation
 Control flow begins at the 'forg', or @ symbol. Every iteration of the program, the forg will jump to a new command given by:
 
