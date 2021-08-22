@@ -6,9 +6,20 @@ Control flow begins at the 'forg', or @ symbol. Every iteration of the program, 
  - (Current line number) / 2 if the line number is even.
   - 1 + (Current line number) * 3 if the line number is odd.
 
-Additionally, if the forg lands in water, he will continue swimming in the direction he was travelling until he reaches another command or a duck lets him on its back. Note that in the case that the map contains no water or ducks, the forg evaluates the [Collatz Conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture).
+Additionally, if the forg lands in water, he will continue swimming in the direction he was travelling until he reaches another command or a duck lets him on its back. Note that in the case that the map contains no water or ducks ([example](collatz.forg)), the forg evaluates the [Collatz Conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture).
 
-The forg remembers things using its brain, which acts like a stack. By default, every cell in the stack is initialized to zero. The `+` and `-` commands increment or decrement the value of one of the memory cells in the stack.
+The forg remembers things using its brain (aka forgmem), which is initialized to zero. Forgmem acts like a stack, with cells that can be incremented/decremented with the `+` and `-` commands. For example, the stack is initialized to
+
+```
+1[0] 2[0] 3[0] 4[0] ...
+```
+so executing the command `+3` will increment cell 3, to give
+
+```
+1[0] 2[0] 3[1] 4[0] ...
+```
+
+Negative cell values are permitted, although negative cell addresses are not (for syntactical reasons).
 
 ## Commands
 
@@ -89,12 +100,10 @@ He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero an
 
 ## Compilation
 
-Run a forglang program using the syntax
-```.\forglang.exe <path>```, passing the path to your script as an argument. For example, 
+Use `g++ forglang.cc -o forglang` to compile the c++ from the source, or use the standalone executable provided.
 
-```powershell
-.\forglang.exe add.forg
-```
 
-(Use `g++ forglang.cc -o forglang
-` to compile from the source, or use the standalone executable provided)
+To run a forglang program, use the
+```.\forglang.exe <path>```, passing the path to your script as an argument. For example, ```.\forglang.exe add.forg``` executes the forglang program [add.forg](add.forg) in the command line.
+
+Additionally, you can pass the `-d` flag to reveal debugging information when the program terminates.
