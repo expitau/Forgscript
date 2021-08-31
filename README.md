@@ -100,6 +100,8 @@ He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero an
 
 ## Compilation
 
+<!-- BUILD: g++ forglang.cc -o forglang -fPIC -static -static-libgcc -static-libstdc++ -->
+
 Use `g++ forglang.cc -o forglang` to compile the c++ from the source, or use the standalone executable provided.
 
 
