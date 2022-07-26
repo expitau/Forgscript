@@ -105,8 +105,7 @@ He continues decrementing cell 1 and incrementing cell 2 until cell 1 is zero an
 
 <!-- BUILD: g++ forglang.cc -o forglang -fPIC -static -static-libgcc -static-libstdc++ -->
 
-Use `g++ forglang.cc -o forglang` to compile the c++ from the source, or use the standalone executable provided.
-
+Use `g++ forglang.cc -o forglang` to compile the c++ from the source, or use the standalone executable provided ([Latest release](https://github.com/expitau-dev/Forglang/releases/latest)).
 
 To run a forglang program, use the
 ```.\forglang.exe <path>```, passing the path to your script as an argument. For example, ```.\forglang.exe add.forg``` executes the forglang program [add.forg](add.forg) in the command line.
