@@ -154,11 +154,24 @@ fn clear() {
     stdout.queue(cursor::MoveTo(0, 0)).unwrap();
 }
 
+fn help(){
+    println!("Usage: forgscript <path> [options]");
+    println!("    path     The path to a forgscript file");
+    println!("    options  The options to run this script with");
+    println!("        --debug  Run in debug mode");
+    println!("        --ascii  Use ascii inputs and outputs instead of integers");
+}
+
 fn main() {
     let command: Vec<String> = env::args().collect();
     let (_, args) = command.split_at(1);
 
-    let filepath = args.get(0).expect("No file specified");
+    if args.contains(&"--help".to_string()) || args.len() == 0 {
+        help();
+        return;
+    }
+
+    let filepath = args.get(0).unwrap();
 
     let ascii_mode = args.contains(&"--ascii".to_string());
     let debug_mode = args.contains(&"--debug".to_string());
@@ -190,7 +203,7 @@ fn main() {
 
         if debug_mode {
             clear();
-            println!("{: >3} | y: {}  x: {}  c: {}\n", steps, fy, fx, cell);
+            println!("{: >3} | y: {}  x: {}  c: {}\n", steps, fy + 1, fx + 1, cell);
             render_registers(&registers);
             render_grid(&grid, fx, fy);
         }
