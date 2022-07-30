@@ -1,0 +1,53 @@
+{
+  "name": "forgscript-language-support",
+  "displayName": "forgscript-language-support",
+  "description": "Adds VSCode support for ForgScript",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:forgscript"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "forgscript",
+        "aliases": [
+          "ForgScript",
+          "forgscript"
+        ],
+        "extensions": [
+          ".fgs",
+          ".forgs"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "forgscript",
+        "scopeName": "source.forgscript",
+        "path": "./syntaxes/forgscript.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "ForgScript",
+      "properties": {
+        "forgscript.highlightNextCommand": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specifies whether to highlight the next step of the program"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.69.0"
+  }
+}

@@ -1,0 +1,48 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "ForgScript",
+	"patterns": [
+		{
+			"include": "#control"
+		},
+		{
+			"include": "#io"
+		},
+		{
+			"include": "#memory"
+		},
+		{
+			"include": "#comment"
+		}
+	],
+	"repository": {
+		"control": {
+			"patterns": [{
+				"name": "keyword.control.forgscript",
+				"match": "[v^\\*]"
+			}]
+		},
+		"io": {
+			"patterns": [{
+				"name": "entity.name.function.forgscript",
+				"match": "[><]"
+			}]
+		},
+		"memory": {
+			"patterns": [{
+				"name": "entity.name.tag.forgscript",
+				"match": "[\\+\\-]"
+			}]
+		},
+		"comment": {
+			"name": "comment.forgscript",
+			"patterns": [
+				{
+					"name": "comment.ignored.forgscript",
+					"match": "."
+				}
+			]
+		}
+	},
+	"scopeName": "source.forgscript"
+}
