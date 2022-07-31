@@ -6,12 +6,13 @@ Adds language support for Forgscript
 
 - Syntax highlighting
 - Underline next step
+- Highlight next action
+
+## Installation
+
+To install copy this folder to `$HOME\.vscode\extensions`, and it should enable automatically.
 
 ## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
 
 This extension contributes the following settings:
 

@@ -119,6 +119,10 @@ Notice that we've already been here, so the forg has successfully looped. The fo
 
 The value of memory cell `7` is printed. It is a '3'. The forg goes `(6, 7) -> (6, 22) -> (7, 11)` and terminates.
 
+## Langage Support
+
+Forglang has official VSCode Language Support available [here](language/README.md). To install copy the "forgscript/language" folder to `$HOME\.vscode\extensions`, and it should enable automatically.
+
 ## Compilation
 
 Use `cargo build --release` to compile the rust from the source, or use the standalone executable provided ([Latest release](https://github.com/expitau-dev/Forglang/releases/latest)).
