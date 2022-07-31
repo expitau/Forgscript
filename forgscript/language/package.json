@@ -2,7 +2,7 @@
   "name": "forgscript-language-support",
   "displayName": "forgscript-language-support",
   "description": "Adds VSCode support for ForgScript",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.69.0"
   },
@@ -39,10 +39,15 @@
     "configuration": {
       "title": "ForgScript",
       "properties": {
-        "forgscript.highlightNextCommand": {
+        "forgscript.underlineNextStep": {
           "type": "boolean",
           "default": true,
-          "description": "Specifies whether to highlight the next step of the program"
+          "description": "Specifies whether to underline the next step(s) of the program (where the forg will jump next)"
+        },
+        "forgscript.highlightNextAction": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specifies whether to highlight the next action the program will take (the next command that is not a '.' or ignored)"
         }
       }
     }

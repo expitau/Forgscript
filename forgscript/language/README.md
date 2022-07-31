@@ -15,9 +15,14 @@ For example:
 
 This extension contributes the following settings:
 
-* `forgscript.highlightNextCommand`: Specifies whether to highlight the next step of the program
+* `forgscript.underlineNextStep`: Specifies whether to underline the next step(s) of the program (where the forg will jump next)
+* `forgscript.highlightNextAction`: Specifies whether to highlight the next action the program will take (the next command that is not a '.' or ignored)
 
 ## Release Notes
+
+### 0.1.1
+
+Support for highlighting next action
 
 ### 0.1.0
 
