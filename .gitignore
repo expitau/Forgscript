@@ -1,3 +1,2 @@
 .vscode
-forglang.exe
-forgscript/*/target
+interpreter/target
