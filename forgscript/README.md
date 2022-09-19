@@ -1,4 +1,4 @@
-# Forglang
+# Forgscript
 
 ### About
 Forglang is an esoteric programming language (similar to [brainfuck](https://en.wikipedia.org/wiki/Brainfuck)), whose distinguishing feature is non-linear code execution.

@@ -1,4 +1,4 @@
-# Forglang Language Support
+# Forgscript Language Support
 
 Adds language support for Forgscript
 
