@@ -57,7 +57,14 @@ function activate(context) {
 		function getRange(pos) {
 			return new vscode.Range(pos, pos.translate(0, 1))
 		}
-		let newPos = pos.with();
+		let newPos
+		if (getCharAt(pos, editor).match(/[v]/)) {
+			newPos = pos.translate(1);
+		} else if (getCharAt(pos, editor).match(/\^/)){
+			newPos = pos.translate(-1);
+		} else {
+			newPos = pos.with();
+		}
 		function isNoop(char) {
 			return !char.match(/[v^<>\+\-\*]/)
 		}
