@@ -2,7 +2,7 @@ use crossterm::{cursor, terminal, ExecutableCommand, QueueableCommand};
 use std::env;
 use std::fs;
 use std::io;
-use std::io::{stdout, Write};
+use std::io::{stdout, Read, Write};
 
 fn render_registers(registers: &Vec<i32>) {
     fn get_digit(i: i32, d: u32) -> i32 {
@@ -82,40 +82,61 @@ fn collatz(x: i32) -> i32 {
     }
 }
 
-fn input(ascii_mode: bool) -> i32 {
+fn input(flags: &Flags) -> i32 {
     loop {
         let mut input_text = String::new();
-        print!("> ");
-        io::stdout().flush().unwrap();
-        io::stdin()
-            .read_line(&mut input_text)
-            .expect("failed to read from stdin");
-        let trimmed = input_text.trim();
-        if !ascii_mode {
+        if !flags.SILENT {
+            print!("> ");
+            io::stdout().flush().unwrap();
+        }
+        if !flags.ASCII {
+            io::stdin()
+                .read_line(&mut input_text)
+                .expect("failed to read from stdin");
+            let trimmed = input_text.trim();
             if let Ok(i) = trimmed.parse::<i32>() {
                 return i;
             } else {
-                println!("this was not an integer: '{}'", trimmed)
+                if !flags.SILENT {
+                    println!("this was not an integer: '{}'", trimmed)
+                }
             }
         } else {
-            if let Ok(i) = trimmed.parse::<char>() {
+            let mut c: Option<i32>;
+            while {
+                c = io::stdin()
+                    .bytes()
+                    .next()
+                    .and_then(|result| result.ok())
+                    .map(|byte| byte as i32);
+                !flags.CRLF && (c == Some(10) || c == Some(13))
+            } {}
+            if let Some(i) = c {
                 return i as i32;
             } else {
-                println!("this was not an char: '{}'", trimmed)
+                if !flags.SILENT {
+                    println!("Failed to read character")
+                }
             }
         }
     }
 }
 
-fn output(data: i32, ascii_mode: bool) {
-    if !ascii_mode {
-        println!("Forg says {}", data);
+fn output(data: i32, flags: &Flags) {
+    let output = if !flags.ASCII {
+        data.to_string()
     } else {
-        println!("Forg says {}", char::from_u32(data as u32).unwrap_or('�'))
+        char::from_u32(data as u32).unwrap_or('�').to_string()
+    };
+    if flags.SILENT {
+        print!("{}", output);
+        io::stdout().flush().unwrap();
+    } else {
+        println!("Forg says {}", output)
     }
 }
 
-fn get_next(x: i32, y: i32, cell: &char, val: i32, ascii_mode: bool) -> (i32, i32, i32) {
+fn get_next(x: i32, y: i32, cell: &char, val: i32, flags: &Flags) -> (i32, i32, i32) {
     (
         match cell {
             '*' => {
@@ -135,9 +156,9 @@ fn get_next(x: i32, y: i32, cell: &char, val: i32, ascii_mode: bool) -> (i32, i3
         match cell {
             '+' => val + 1,
             '-' => val - 1,
-            '<' => input(ascii_mode),
+            '<' => input(flags),
             '>' => {
-                output(val, ascii_mode);
+                output(val, flags);
                 val
             }
             _ => val,
@@ -154,12 +175,22 @@ fn clear() {
     stdout.queue(cursor::MoveTo(0, 0)).unwrap();
 }
 
-fn help(){
+fn help() {
     println!("Usage: forgscript <path> [options]");
     println!("    path     The path to a forgscript file");
     println!("    options  The options to run this script with");
-    println!("        --debug  Run in debug mode");
-    println!("        --ascii  Use ascii inputs and outputs instead of integers");
+    println!("        --debug   Run in debug mode");
+    println!("        --ascii   Use ascii inputs and outputs instead of integers");
+    println!("        --silent  Suppress output and only print input errors");
+    println!("        --crlf    For use with the --ascii flag. Include CR and LF characters as inputs");
+}
+
+#[allow(non_snake_case)]
+struct Flags {
+    ASCII: bool,
+    SILENT: bool,
+    DEBUG: bool,
+    CRLF: bool,
 }
 
 fn main() {
@@ -173,8 +204,12 @@ fn main() {
 
     let filepath = args.get(0).unwrap();
 
-    let ascii_mode = args.contains(&"--ascii".to_string());
-    let debug_mode = args.contains(&"--debug".to_string());
+    let flags: Flags = Flags {
+        ASCII: args.contains(&"--ascii".to_string()),
+        SILENT: args.contains(&"--silent".to_string()),
+        DEBUG: args.contains(&"--debug".to_string()),
+        CRLF: args.contains(&"--crlf".to_string()),
+    };
 
     let script = load_script(filepath);
 
@@ -201,9 +236,15 @@ fn main() {
             .get(fx as usize)
             .unwrap_or(&'.');
 
-        if debug_mode {
+        if flags.DEBUG {
             clear();
-            println!("{: >3} | y: {}  x: {}  c: {}\n", steps, fy + 1, fx + 1, cell);
+            println!(
+                "{: >3} | y: {}  x: {}  c: {}\n",
+                steps,
+                fy + 1,
+                fx + 1,
+                cell
+            );
             render_registers(&registers);
             render_grid(&grid, fx, fy);
         }
@@ -212,7 +253,7 @@ fn main() {
             fy,
             cell,
             *registers.get(fx as usize).unwrap_or(&0),
-            ascii_mode,
+            &flags,
         );
         if let Some(_) = registers.get(fx as usize) {
             registers[fx as usize] = next.2;
@@ -220,7 +261,7 @@ fn main() {
         fx = next.0;
         fy = next.1;
 
-        if debug_mode {
+        if flags.DEBUG {
             print!("Press enter to continue ");
             io::stdout().flush().unwrap();
 
@@ -231,6 +272,7 @@ fn main() {
         }
     }
     println!();
-    println!("Finished in {} steps", steps);
+    if !flags.SILENT {
+        println!("Finished in {} steps", steps);
+    }
 }
-
